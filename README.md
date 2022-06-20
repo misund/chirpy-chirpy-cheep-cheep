@@ -1,7 +1,7 @@
 
 # TODO
-
 1. [ ] Create a simple front with a client-side direct API call
+1. [ ] Get Twitter dev account
 1. [ ] (Implement long polling? Not sure if I need it after gPRC implementation is done)
 1. [ ] Move the API call to a custom server
 1. [ ] (Proxy the Twitter API calls for simpler caching?)
@@ -16,6 +16,15 @@
 - [ ] http or express?
 - [x] api: **gRPC** or kafka?
 - [ ] caching storage. redis?
+
+# Twitter's very similar tutorial
+[[tutorial](), [github](https://github.com/twitterdev/real-time-tweet-streamer)]
+
+It turns out there's an official tutorial from Twitter available for which the description closely resembles what I'm setting out to do. I want to make a couple of different choices, but let's keep it around for easy reference.
+
+(For example, I want to use gRPC instead of websockets, and ideally react renders instead of embeds. One can argue that using protocol buffers instead of Twitter's original JSON responses might complicate things unnecessary, but there's a chance for me to learn something new while working on this instead of just replicating somebody else's code.
+
+Also, I might try to run the API off the same server as the front app, instead making the division on server vs client code. Haven't decided yet whether this will make things easier or more complicated.
 
 # Custom server with TypeScript + Nodemon example
 
