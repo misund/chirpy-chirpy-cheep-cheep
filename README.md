@@ -11,11 +11,11 @@
 1. [ ] (Cache the tweets in a local redis? If I don't cache the external API calls. Figure out how/whether to leverage protobuf for this?)
 
 # Tech calls
-- Client: next or svelte?
-- Server: next, plain node or something completely different?
-- http or express?
-- api: gRPC or kafka?
-- caching storage. redis?
+- [x] Client: **next** or svelte?
+- [x] Server: **next**, plain node or something completely different?
+- [ ] http or express?
+- [ ] api: gRPC or kafka?
+- [ ] caching storage. redis?
 
 # Custom server with TypeScript + Nodemon example
 
