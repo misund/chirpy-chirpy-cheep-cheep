@@ -14,7 +14,7 @@
 - [x] Client: **next** or svelte?
 - [x] Server: **next**, plain node or something completely different?
 - [ ] http or express?
-- [ ] api: gRPC or kafka?
+- [x] api: **gRPC** or kafka?
 - [ ] caching storage. redis?
 
 # Custom server with TypeScript + Nodemon example
