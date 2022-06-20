@@ -1,3 +1,22 @@
+
+# TODO
+
+1. [ ] Create a simple front with a client-side direct API call
+1. [ ] (Implement long polling? Not sure if I need it after gPRC implementation is done)
+1. [ ] Move the API call to a custom server
+1. [ ] (Proxy the Twitter API calls for simpler caching?)
+1. [ ] Create a protobuf definition of the service and messages
+1. [ ] Implement the gRPC server
+1. [ ] Implement the gRPC client
+1. [ ] (Cache the tweets in a local redis? If I don't cache the external API calls. Figure out how/whether to leverage protobuf for this?)
+
+# Tech calls
+- Client: next or svelte?
+- Server: next, plain node or something completely different?
+- http or express?
+- api: gRPC or kafka?
+- caching storage. redis?
+
 # Custom server with TypeScript + Nodemon example
 
 The example shows how you can use [TypeScript](https://typescriptlang.com) on both the server and the client while using [Nodemon](https://nodemon.io/) to live reload the server code without affecting the Next.js universal code.
