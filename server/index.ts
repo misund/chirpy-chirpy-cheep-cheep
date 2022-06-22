@@ -9,6 +9,7 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
   createServer((req, res) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const parsedUrl = parse(req.url!, true)
     handle(req, res, parsedUrl)
   }).listen(port)
@@ -17,6 +18,6 @@ app.prepare().then(() => {
   console.log(
     `> Server listening at http://localhost:${port} as ${
       dev ? 'development' : process.env.NODE_ENV
-    }`
+    }`,
   )
 })

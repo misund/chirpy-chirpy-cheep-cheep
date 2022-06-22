@@ -18,7 +18,7 @@
 - [ ] caching storage. redis?
 
 # Twitter's very similar tutorial
-[[tutorial](), [github](https://github.com/twitterdev/real-time-tweet-streamer)]
+[[tutorial](https://developer.twitter.com/en/docs/tutorials/building-an-app-to-stream-tweets), [github](https://github.com/twitterdev/real-time-tweet-streamer)]
 
 It turns out there's an official tutorial from Twitter available for which the description closely resembles what I'm setting out to do. I want to make a couple of different choices, but let's keep it around for easy reference.
 

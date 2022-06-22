@@ -14,7 +14,7 @@ export default function Home() {
           <a>b</a>
         </Link>
       </li>
-      <Tweet screenName="misund" text="This is a tweet"  />
+      <Tweet screenName="misund" text="This is a tweet" />
     </ul>
   )
 }
