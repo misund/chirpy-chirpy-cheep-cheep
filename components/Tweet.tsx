@@ -29,13 +29,13 @@ const Text = styled.div`
 `
 
 const Tweet = ({ screenName, avatarImg = '', text }: TweetProps) => {
-  avatarImg = avatarImg
+  const avatarSrc = avatarImg
     ? avatarImg
-    : 'https://ui-avatars.com/api/?size=32&name=' + screenName
+    : `https://ui-avatars.com/api/?size=32&name=${screenName}`
 
   return (
     <TweetBox>
-      <Img src={avatarImg} alt={screenName} />
+      <Img src={avatarSrc} alt={screenName} />
       <TextBlock>
         <ScreenName>{screenName}</ScreenName>
         <Text>{text}</Text>
