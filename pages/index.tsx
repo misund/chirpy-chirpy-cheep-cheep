@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Tweet from '../components/Tweet'
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
           <a>b</a>
         </Link>
       </li>
+      <Tweet screenName="misund" text="This is a tweet"  />
     </ul>
   )
 }
