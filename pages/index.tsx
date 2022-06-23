@@ -5,8 +5,8 @@ export default function Home() {
   return (
     <ul>
       <li>
-        <Link href="/a" as="/a">
-          <a>a</a>
+        <Link href="/long-polling" as="/long-polling">
+          <a>First: Long polling</a>
         </Link>
       </li>
       <li>

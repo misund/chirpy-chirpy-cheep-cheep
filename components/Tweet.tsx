@@ -5,7 +5,7 @@ const TweetBox = styled.div`
   border: 1px solid #eee;
 `
 
-type TweetProps = {
+interface TweetProps {
   screenName: string
   avatarImg?: string
   text: string
