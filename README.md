@@ -1,23 +1,28 @@
-
 # TODO
-1. [ ] Create a simple front with a client-side direct API call
-1. [ ] Get Twitter dev account
-1. [ ] (Implement long polling? Not sure if I need it after gPRC implementation is done)
+
+1. [x] Create a simple front with a client-side direct API call
+1. [x] Get Twitter dev account
+1. [x] (Implement long polling? Not sure if I need it after gPRC implementation is done)
 1. [ ] Move the API call to a custom server
-1. [ ] (Proxy the Twitter API calls for simpler caching?)
+1. [x] (Proxy the Twitter API calls for simpler caching?)
 1. [ ] Create a protobuf definition of the service and messages
 1. [ ] Implement the gRPC server
 1. [ ] Implement the gRPC client
 1. [ ] (Cache the tweets in a local redis? If I don't cache the external API calls. Figure out how/whether to leverage protobuf for this?)
+1. [ ] Dockerize
+1. [ ] Deploy somewhere
 
 # Tech calls
+
 - [x] Client: **next** or svelte?
 - [x] Server: **next**, plain node or something completely different?
-- [ ] http or express?
+- [x] http or express?
 - [x] api: **gRPC** or kafka?
 - [ ] caching storage. redis?
+- [ ] Where to deploy?
 
 # Twitter's very similar tutorial
+
 [[tutorial](https://developer.twitter.com/en/docs/tutorials/building-an-app-to-stream-tweets), [github](https://github.com/twitterdev/real-time-tweet-streamer)]
 
 It turns out there's an official tutorial from Twitter available for which the description closely resembles what I'm setting out to do. I want to make a couple of different choices, but let's keep it around for easy reference.
