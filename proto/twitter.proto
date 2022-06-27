@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+service Tweets {
+    // Simply wrapping twitter's rest search
+    rpc unarySearch(SearchRequest) returns (SearchReply);
+
+    rpc search(SearchRequest) returns (stream SearchReply);
+}
+
+message Tweet {
+    string author_id = 1; // should I use enums here? Probably not
+    string created_at = 2;
+string id = 3;
+    string text = 4;
+}
+
+message User {
+    string id = 1;
+    string name = 2;
+    string profile_image_url = 3;
+    string username = 4;
+}
+
+message Meta {
+    optional string query = 1;
+    optional string newest_id = 2;
+    optional string next_token = 3;
+    optional string oldest_id = 4;
+    optional number result_count = 5;
+}
+
+message SearchRequest {
+    string query = 1;
+    optional string since_id = 2;
+}
+
+message SearchReply {
+    repeated Tweet tweet = 1;
+    repeated User user = 2;
+    Meta meta = 3;
+}
