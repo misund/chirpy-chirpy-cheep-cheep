@@ -1,5 +1,16 @@
 import { createContext } from 'react'
 
+/**
+ * Tweets Context Interface
+ *
+ * This interface looks a lot like the Twitter API's responses, with a few
+ * notable exceptions: The top level fields are mandatory, and there's an extra
+ * meta field for the current query. Also, the 'data' field from Twitter's API
+ * has been renamed to 'tweets'.
+ *
+ * @TODO Consider renaming 'tweets' back to 'data'
+ */
+
 export interface ITweetsContext {
   tweets: {
     author_id: string
