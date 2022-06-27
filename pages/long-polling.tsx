@@ -8,10 +8,14 @@ const UPDATE_FREQUENCY = 30000
 
 function fetchData(query: string, since_id?: string) {
   const url =
-    `${API_URL}tweets/search/recent?tweet.fields=created_at&user.fields=profile_image_url&expansions=author_id&` +
-    `query=${query}${(since_id && `&since_id=${since_id}`) || ''}`
+    `${API_URL}tweets/search/recent` +
+    '?tweet.fields=created_at' +
+    '&user.fields=profile_image_url' +
+    '&expansions=author_id' +
+    `&query=${query}` +
+    `${(since_id && `&since_id=${since_id}`) || ''}`
 
-  console.log('outgoing request', url)
+  // console.log('outgoing request', url)
 
   return fetch(url)
     .then(res => res.json())
@@ -21,6 +25,17 @@ function fetchData(query: string, since_id?: string) {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {}
 
+/**
+ * Long Polling Implementation
+ *
+ * Edge cases that are not handled include:
+ * - Getting older tweets than the 10 most recent at the first payload
+ * - Getting all tweets if there are more than 10 new tweets during one update
+ *   interval
+ *
+ * Both of these cases can be easily handled using the next_token parameter,
+ * but I will prioritize other tasks.
+ */
 export default class LongPolling extends React.Component<
   IProps,
   ITweetsContext
@@ -44,7 +59,10 @@ export default class LongPolling extends React.Component<
         <div className="search">
           <input
             placeholder="Type your search query here"
-            onChange={debounce(e => this.handleChangedQuery(e), 500)}
+            onChange={debounce(
+              (e: { target: { value: string } }) => this.handleChangedQuery(e),
+              500,
+            )}
           ></input>
         </div>
 
@@ -55,10 +73,8 @@ export default class LongPolling extends React.Component<
 
   componentDidMount() {
     this.timerID = setInterval(() => this.updateTweets(), UPDATE_FREQUENCY)
-    console.log('creating this.timerID', this.timerID)
   }
   componentWillUnmount() {
-    console.log('reading this.timerID', this.timerID)
     clearInterval(this.timerID)
   }
 
@@ -88,8 +104,6 @@ export default class LongPolling extends React.Component<
   }
 
   updateContext = (query: string, json: any) => {
-    console.log('json', json)
-
     if (json.meta.result_count > 0) {
       this.setState(({ tweets, users, meta }) => {
         // clear tweets if the query is different
@@ -104,8 +118,6 @@ export default class LongPolling extends React.Component<
             ...json.meta,
           },
         }
-
-        console.log('newContext', newContext)
 
         return newContext
       })
