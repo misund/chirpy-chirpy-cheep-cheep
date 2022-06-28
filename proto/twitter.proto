@@ -24,7 +24,7 @@ message Meta {
     optional string newest_id = 2;
     optional string next_token = 3;
     optional string oldest_id = 4;
-    optional number result_count = 5;
+    optional int32 result_count = 5;
 }
 
 message SearchRequest {
