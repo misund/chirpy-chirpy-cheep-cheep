@@ -1,9 +1,7 @@
 syntax = "proto3";
 
 service Tweets {
-    // Simply wrapping twitter's rest search
     rpc unarySearch(SearchRequest) returns (SearchReply);
-
     rpc search(SearchRequest) returns (stream SearchReply);
 }
 
@@ -35,7 +33,7 @@ message SearchRequest {
 }
 
 message SearchReply {
-    repeated Tweet tweet = 1;
-    repeated User user = 2;
+    repeated Tweet tweets = 1;
+    repeated User users = 2;
     Meta meta = 3;
 }
