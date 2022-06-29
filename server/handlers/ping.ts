@@ -3,8 +3,8 @@ import {
   IPingPongServiceServer,
   PingPongServiceService,
   PingPongServiceClient,
-} from '../../generated/proto/first_grpc_pb'
-import { PlainMessage } from '../../generated/proto/first_pb'
+} from '../../generated/proto/ping_grpc_pb'
+import { PlainMessage } from '../../generated/proto/ping_pb'
 
 const pingPongHandler: IPingPongServiceServer = {
   ping(
