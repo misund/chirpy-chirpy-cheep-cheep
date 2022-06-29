@@ -24,7 +24,7 @@ const tweetsHandler: ITweetsServer = {
       tweet.setAuthorId('123')
       tweet.setCreatedAt(Date.now().toString())
       tweet.setText('This is a test tweet from my grpc server')
-      const tweets = [tweet]
+      const tweets = [tweet, tweet]
 
       const user = new User()
       user.setId('123')
@@ -35,11 +35,14 @@ const tweetsHandler: ITweetsServer = {
 
       const meta = new Meta()
       meta.setQuery(call.request.getQuery())
+      meta.setResultCount(1)
 
       const searchReply = new SearchReply()
-      searchReply.setMeta(new Meta())
+      searchReply.setMeta(meta)
       searchReply.setTweetsList(tweets)
       searchReply.setUsersList(users)
+
+      // console.log('search reply: ', searchReply.toObject())
 
       callback(null, searchReply)
     }

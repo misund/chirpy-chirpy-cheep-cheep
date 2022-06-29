@@ -5,7 +5,7 @@ const Tweets = () => (
   <TweetsContext.Consumer>
     {({ tweets, users }) => {
       return tweets.map(({ author_id, text, id }) => {
-        const { username, profile_image_url } = users.find(
+        const { username, profile_image_url, profileImageUrl } = users.find(
           user => user.id == author_id,
         ) || { username: 'unknown user' }
 
@@ -14,7 +14,7 @@ const Tweets = () => (
             key={id}
             screenName={username}
             text={text}
-            avatarImg={profile_image_url}
+            avatarImg={profile_image_url || profileImageUrl}
           />
         )
       })

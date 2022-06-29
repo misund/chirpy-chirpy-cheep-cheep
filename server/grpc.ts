@@ -25,4 +25,6 @@ if (require.main === module) {
       }
     },
   )
+} else {
+  console.warn('The grpc-server was called, but main !== module')
 }

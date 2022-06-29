@@ -21,7 +21,8 @@ export interface ITweetsContext {
   users: {
     id: string
     name: string
-    profile_image_url: string
+    profile_image_url?: string // long-polling version does not camelCase from the twitter API
+    profileImageUrl?: string // grpc-web camelCases the params
     username: string
   }[]
   meta: {

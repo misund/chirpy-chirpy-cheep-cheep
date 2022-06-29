@@ -10,8 +10,8 @@ export default function Home() {
         </Link>
       </li>
       <li>
-        <Link href="/b" as="/b">
-          <a>b</a>
+        <Link href="/grpc-web-unary" as="/grpc-web-unary">
+          <a>Second: gRPC-web, single unary call</a>
         </Link>
       </li>
       <Tweet screenName="misund" text="This is a tweet" />
