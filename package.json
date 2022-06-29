@@ -3,9 +3,10 @@
   "scripts": {
     "clean": "rm -rf .next dist generated",
     "dev": "nodemon",
-    "build": "yarn build:proto && yarn build:next",
-    "build:next": "next build && tsc --project tsconfig.server.json",
+    "build": "yarn build:proto && yarn build:next && build:ts",
     "build:proto": "./compile-proto.sh",
+    "build:next": "next build",
+    "build:ts": "tsc --project tsconfig.server.json",
     "start": "yarn start next",
     "start:next": "cross-env NODE_ENV=production node dist/next.js",
     "start:grpc": "node server/grpc",
