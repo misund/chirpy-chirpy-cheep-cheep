@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "clean": "rm -rf .next dist generated && yarn clean:envoy",
-    "clean:envoy": "docker rm grpc-envoy",
+    "clean:envoy": "docker rm grpc-envoy || echo 'envoy is already cleaned'",
     "dev": "yarn build:proto && concurrently \"yarn dev:next\" \"yarn dev:grpc\" \"yarn dev:envoy\"",
     "dev:next": "nodemon",
     "dev:envoy": "docker run --name grpc-envoy -p 8080:8080 -v \"$(pwd)\"/envoy.yaml:/etc/envoy/envoy.yaml:ro envoyproxy/envoy-dev:latest",
@@ -25,6 +25,7 @@
     "concurrently": "^7.2.2",
     "cross-env": "^7.0.2",
     "debounce": "^1.2.1",
+    "dotenv": "^16.0.1",
     "eslint-config-prettier": "^8.5.0",
     "google-protobuf": "^3.20.1",
     "grpc-tools": "^1.11.2",

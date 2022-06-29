@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { createServer } from 'http'
 import httpProxy from 'http-proxy'
 import { parse } from 'url'
@@ -30,7 +31,7 @@ app.prepare().then(() => {
       parsedUrl.pathname?.slice(0, '/api/twitter/'.length) == '/api/twitter/'
     ) {
       if (!process.env.TWITTER_BEARER_TOKEN) {
-        console.error('Missing env var TWITTER_BEARER_TOKEN')
+        console.error('\x1b[31m', 'Missing env var TWITTER_BEARER_TOKEN')
       }
       req.url = req.url?.slice('/api/twitter'.length)
       twitterApiProxy.web(req, res, {}, logError)
