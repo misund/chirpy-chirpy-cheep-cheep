@@ -1,24 +1,31 @@
 {
   "private": true,
   "scripts": {
-    "clean": "rm -rf .next dist proto/generated*",
+    "clean": "rm -rf .next dist generated",
     "dev": "nodemon",
-    "build": "next build && tsc --project tsconfig.server.json && yarn build-protos",
+    "build": "yarn build:proto && next build && tsc --project tsconfig.server.json",
+    "build:proto": "./compile-proto.sh",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "test": "yarn lint",
-    "build-protos": "protoc -I=proto twitter.proto --grpc-web_out=import_style=typescript,mode=grpcwebtext:proto/generated --experimental_allow_proto3_optional --js_out=import_style=commonjs:proto/generated"
+    "test": "yarn lint"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.6.7",
+    "@grpc/proto-loader": "^0.6.13",
     "cross-env": "^7.0.2",
     "debounce": "^1.2.1",
     "eslint-config-prettier": "^8.5.0",
+    "google-protobuf": "^3.20.1",
+    "grpc-tools": "^1.11.2",
+    "grpc-web": "^1.3.1",
     "http-proxy": "^1.18.1",
     "next": "latest",
+    "protoc-gen-grpc-web": "^1.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^18.2.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "ts-protoc-gen": "^0.15.0"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.1",
