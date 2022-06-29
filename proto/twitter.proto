@@ -20,16 +20,16 @@ message User {
 }
 
 message Meta {
-    optional string query = 1;
-    optional string newest_id = 2;
-    optional string next_token = 3;
-    optional string oldest_id = 4;
-    optional int32 result_count = 5;
+    string query = 1;
+    string newest_id = 2;
+    string next_token = 3;
+    string oldest_id = 4;
+    int32 result_count = 5;
 }
 
 message SearchRequest {
     string query = 1;
-    optional string since_id = 2;
+    string since_id = 2;
 }
 
 message SearchReply {
