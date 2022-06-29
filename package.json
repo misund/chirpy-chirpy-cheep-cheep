@@ -3,9 +3,13 @@
   "scripts": {
     "clean": "rm -rf .next dist generated",
     "dev": "nodemon",
-    "build": "yarn build:proto && next build && tsc --project tsconfig.server.json",
+    "build": "yarn build:proto && yarn build:next",
+    "build:next": "next build && tsc --project tsconfig.server.json",
     "build:proto": "./compile-proto.sh",
-    "start": "cross-env NODE_ENV=production node dist/next.js",
+    "start": "yarn start next",
+    "start:next": "cross-env NODE_ENV=production node dist/next.js",
+    "start:grpc": "node server/grpc",
+    "start:envoy": "docker run --name grpc-envoy -d -p 8080:8080 -v \"$(pwd)\"/envoy.yaml:/etc/envoy/envoy.yaml:ro envoyproxy/envoy-dev:latest",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "test": "yarn lint"
   },
