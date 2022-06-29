@@ -5,10 +5,9 @@
     "dev": "nodemon",
     "build": "yarn build:proto && next build && tsc --project tsconfig.server.json",
     "build:proto": "./compile-proto.sh",
-    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "start": "cross-env NODE_ENV=production node dist/next.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "test": "yarn lint",
-    "build-protos": "protoc -I=proto twitter.proto --grpc-web_out=import_style=typescript,mode=grpcwebtext:proto/generated --experimental_allow_proto3_optional --js_out=import_style=commonjs:proto/generated"
+    "test": "yarn lint"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.6.7",
