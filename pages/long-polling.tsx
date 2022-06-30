@@ -7,7 +7,7 @@ import {
   apiToContextMeta,
   apiToContextTweets,
   apiToContextUsers,
-} from '../type-conversions/twitter-api-and-tweets-context'
+} from '../utils/type-conversion'
 
 const UPDATE_FREQUENCY = 10000
 
@@ -105,9 +105,6 @@ export default class LongPolling extends React.Component<
       this.setState(({ tweets, users, meta }) => {
         // clear tweets if the query is different
         const ts = meta.query === query ? tweets : []
-
-        console.log('before conversion', json.includes?.users)
-        console.log('after conversion', apiToContextUsers(json.includes?.users))
 
         const newContext = {
           tweets: apiToContextTweets(json.data || []).concat(ts),

@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js'
-import { apiResponseToGrpcSearchReply } from '../../type-conversions/twitter-api-and-tweets-context'
+import { apiResponseToGrpcSearchReply } from '../../utils/type-conversion'
 import {
   ITweetsServer,
   TweetsService,
@@ -14,8 +14,6 @@ const updateStream = (
 ) => {
   const query = stream.request.getQuery()
   const sinceID = stream.request.getSinceId()
-  const listeners = stream.listenerCount('data')
-  console.log('listeners', listeners)
 
   const apiResponseToGrpcSearchReplyWithQuery = (
     obj: ITwitterApiSearchResult,
@@ -25,13 +23,8 @@ const updateStream = (
     .search(query, sinceID)
     .then(apiResponseToGrpcSearchReplyWithQuery)
     .then(searchReply => {
-      console.log('checking in', searchReply.getMeta()?.getResultCount())
       // Don't bother sending empty results over the wire
       if (searchReply.getMeta()?.getResultCount() == 0) {
-        console.log(
-          'getMeta().getResultCount()',
-          searchReply.getMeta()?.getResultCount(),
-        )
         throw new Error('no results')
       }
 
@@ -61,8 +54,6 @@ const tweetsHandler: ITweetsServer = {
     }
   },
   search(call: grpc.ServerWritableStream<SearchRequest, SearchReply>): void {
-    console.log('this is tweetsServer.search()')
-
     const id = setInterval(() => updateStream(call), UPDATE_INTERVAL)
 
     call.on('close', () => {

@@ -6,7 +6,7 @@ import Tweets from '../components/Tweets'
 import { TweetsClient } from '../generated/proto/twitter_grpc_web_pb'
 import { SearchRequest, SearchReply } from '../generated/proto/twitter_pb'
 import { RpcError } from 'grpc-web'
-import { searchReplyToContext } from '../type-conversions/twitter-api-and-tweets-context'
+import { searchReplyToTweetsContext } from '../utils/type-conversion'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {}
@@ -59,9 +59,6 @@ export default class GrpcTweets extends React.Component<
   componentDidMount() {
     this.client = new TweetsClient(`http://${window.location.hostname}:8080`)
   }
-  componentWillUnmount() {
-    // @TODO clean up subscriptions
-  }
 
   handleChangedQuery(event: { target: { value: string } }) {
     const query = event.target.value
@@ -86,7 +83,7 @@ export default class GrpcTweets extends React.Component<
       return
     }
 
-    const newContext = searchReplyToContext(searchReply)
+    const newContext = searchReplyToTweetsContext(searchReply)
     this.setState(newContext)
   }
 }

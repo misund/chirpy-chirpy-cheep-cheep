@@ -6,7 +6,7 @@ import Tweets from '../components/Tweets'
 import { TweetsClient } from '../generated/proto/twitter_grpc_web_pb'
 import { SearchRequest, SearchReply } from '../generated/proto/twitter_pb'
 import { RpcError, ClientReadableStream } from 'grpc-web'
-import { searchReplyToContext } from '../type-conversions/twitter-api-and-tweets-context'
+import { searchReplyToTweetsContext } from '../utils/type-conversion'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {}
@@ -88,7 +88,7 @@ export default class GrpcTweets extends React.Component<
     this.stream = this.client?.search(request)
 
     this.stream.on('data', searchReply => {
-      const newContextContent = searchReplyToContext(searchReply)
+      const newContextContent = searchReplyToTweetsContext(searchReply)
 
       this.setState(({ users, tweets }) => ({
         meta: newContextContent.meta,

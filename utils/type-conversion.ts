@@ -5,7 +5,7 @@ import {
   ITwitterApiSearchResult,
 } from '../services/twitter'
 import { Tweet, User, Meta, SearchReply } from '../generated/proto/twitter_pb'
-import { ITweetsContext } from 'components/TweetsContext'
+import { ITweetsContext } from '../components/TweetsContext'
 
 /* First, let's have some type conversions between
    the API response and the Tweets context. These
@@ -126,7 +126,7 @@ export const apiResponseToGrpcSearchReply = (
   return searchReply
 }
 
-export const searchReplyToContext = (
+export const searchReplyToTweetsContext = (
   searchReply: SearchReply,
 ): ITweetsContext => {
   return {
