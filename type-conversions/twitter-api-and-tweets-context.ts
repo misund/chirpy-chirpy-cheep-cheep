@@ -5,6 +5,7 @@ import {
   ITwitterApiSearchResult,
 } from '../services/twitter'
 import { Tweet, User, Meta, SearchReply } from '../generated/proto/twitter_pb'
+import { ITweetsContext } from 'components/TweetsContext'
 
 /* First, let's have some type conversions between
    the API response and the Tweets context. These
@@ -87,7 +88,7 @@ export const apiTweetToMessage = (obj: ITwitterApiTweet): Tweet => {
 }
 
 export const apiTweetsToMessage = (obj: ITwitterApiTweet[]): Tweet[] =>
-  obj.map(apiTweetToMessage)
+  obj?.map(apiTweetToMessage)
 
 export const apiUserToMessage = (obj: ITwitterApiUser): User => {
   const user = new User()
@@ -99,28 +100,38 @@ export const apiUserToMessage = (obj: ITwitterApiUser): User => {
 }
 
 export const apiUsersToMessage = (obj: ITwitterApiUser[]): User[] =>
-  obj.map(apiUserToMessage)
+  obj?.map(apiUserToMessage)
 
 export const apiMetaToMessage = (
   obj: ITwitterApiMeta,
   query?: string,
 ): Meta => {
   const meta = new Meta()
-  obj.newest_id && meta.setNewestId(obj.newest_id)
-  obj.next_token && meta.setNextToken(obj.next_token)
-  obj.oldest_id && meta.setOldestId(obj.oldest_id)
-  obj.result_count && meta.setResultCount(obj.result_count)
+  meta.setNewestId(obj?.newest_id || '')
+  meta.setNextToken(obj?.next_token || '')
+  meta.setOldestId(obj?.oldest_id || '')
+  meta.setResultCount(obj?.result_count || 0)
   query && meta.setQuery(query)
   return meta
 }
 
 export const apiResponseToGrpcSearchReply = (
   obj: ITwitterApiSearchResult,
+  query?: string,
 ): SearchReply => {
   const searchReply = new SearchReply()
   searchReply.setTweetsList(apiTweetsToMessage(obj.data))
-
-  searchReply.setUsersList(apiUsersToMessage(obj.includes.users))
-  searchReply.setMeta(apiMetaToMessage(obj.meta))
+  searchReply.setUsersList(apiUsersToMessage(obj?.includes?.users))
+  searchReply.setMeta(apiMetaToMessage(obj.meta, query))
   return searchReply
+}
+
+export const searchReplyToContext = (
+  searchReply: SearchReply,
+): ITweetsContext => {
+  return {
+    tweets: searchReply.getTweetsList().map(t => t.toObject()),
+    users: searchReply.getUsersList().map(u => u.toObject()),
+    meta: (searchReply.getMeta() || new Meta()).toObject(),
+  }
 }

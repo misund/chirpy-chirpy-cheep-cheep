@@ -4,12 +4,46 @@ import {
   ITweetsServer,
   TweetsService,
 } from '../../generated/proto/twitter_grpc_pb'
-import {
-  Meta,
-  SearchReply,
-  SearchRequest,
-} from '../../generated/proto/twitter_pb'
-import twitter from '../../services/twitter'
+import { SearchReply, SearchRequest } from '../../generated/proto/twitter_pb'
+import twitter, { ITwitterApiSearchResult } from '../../services/twitter'
+
+const UPDATE_INTERVAL = 10000
+
+const updateStream = (
+  stream: grpc.ServerWritableStream<SearchRequest, SearchReply>,
+) => {
+  const query = stream.request.getQuery()
+  const sinceID = stream.request.getSinceId()
+  const listeners = stream.listenerCount('data')
+  console.log('listeners', listeners)
+
+  const apiResponseToGrpcSearchReplyWithQuery = (
+    obj: ITwitterApiSearchResult,
+  ) => apiResponseToGrpcSearchReply(obj, query)
+
+  twitter
+    .search(query, sinceID)
+    .then(apiResponseToGrpcSearchReplyWithQuery)
+    .then(searchReply => {
+      console.log('checking in', searchReply.getMeta()?.getResultCount())
+      // Don't bother sending empty results over the wire
+      if (searchReply.getMeta()?.getResultCount() == 0) {
+        console.log(
+          'getMeta().getResultCount()',
+          searchReply.getMeta()?.getResultCount(),
+        )
+        throw new Error('no results')
+      }
+
+      // For the next call, only ask for newer tweets
+      if (searchReply.getMeta()?.getNewestId()) {
+        stream.request.setSinceId(searchReply.getMeta()?.getNewestId() || '')
+      }
+
+      stream.write(searchReply)
+    })
+    .catch(err => console.log(err))
+}
 
 const tweetsHandler: ITweetsServer = {
   unarySearch(
@@ -28,11 +62,13 @@ const tweetsHandler: ITweetsServer = {
   },
   search(call: grpc.ServerWritableStream<SearchRequest, SearchReply>): void {
     console.log('this is tweetsServer.search()')
-    const searchReply = new SearchReply()
-    const meta = new Meta()
-    meta.setQuery(call.request.getQuery())
 
-    searchReply.setMeta(meta)
+    const id = setInterval(() => updateStream(call), UPDATE_INTERVAL)
+
+    call.on('close', () => {
+      clearInterval(id)
+    })
+    call.on('error', err => console.error(err))
   },
 }
 

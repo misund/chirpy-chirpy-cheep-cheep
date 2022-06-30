@@ -5,14 +5,14 @@ import Tweets from '../components/Tweets'
 
 import { TweetsClient } from '../generated/proto/twitter_grpc_web_pb'
 import { SearchRequest, SearchReply } from '../generated/proto/twitter_pb'
-import { RpcError } from 'grpc-web'
+import { RpcError, ClientReadableStream } from 'grpc-web'
 import { searchReplyToContext } from '../type-conversions/twitter-api-and-tweets-context'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {}
 
 /**
- * First grpc client
+ * Streaming grpc client
  */
 export default class GrpcTweets extends React.Component<
   IProps,
@@ -34,6 +34,7 @@ export default class GrpcTweets extends React.Component<
   }
 
   client?: TweetsClient = undefined
+  stream?: ClientReadableStream<SearchReply> = undefined
 
   render() {
     const { tweets, meta, users } = this.state
@@ -60,7 +61,10 @@ export default class GrpcTweets extends React.Component<
     this.client = new TweetsClient(`http://${window.location.hostname}:8080`)
   }
   componentWillUnmount() {
-    // @TODO clean up subscriptions
+    // clean up subscriptions for the old query
+    if (this.stream) {
+      this.stream?.cancel()
+    }
   }
 
   handleChangedQuery(event: { target: { value: string } }) {
@@ -70,23 +74,31 @@ export default class GrpcTweets extends React.Component<
       return
     }
 
+    // clean up subscriptions for the old query
+    if (this.stream) {
+      this.stream?.cancel()
+    }
+
+    // clear tweets since the query is different
+    this.setState({ tweets: [] })
+
     const request = new SearchRequest()
     request.setQuery(query)
 
-    this.client?.unarySearch(
-      request,
-      undefined,
-      this.handleSearchReply.bind(this),
-    )
-  }
+    this.stream = this.client?.search(request)
 
-  handleSearchReply(err: RpcError, searchReply: SearchReply): void {
-    if (err) {
+    this.stream.on('data', searchReply => {
+      const newContextContent = searchReplyToContext(searchReply)
+
+      this.setState(({ users, tweets }) => ({
+        meta: newContextContent.meta,
+        tweets: newContextContent.tweets.concat(tweets),
+        users: newContextContent.users.concat(users),
+      }))
+    })
+
+    this.stream.on('error', (err: RpcError) => {
       console.error(err)
-      return
-    }
-
-    const newContext = searchReplyToContext(searchReply)
-    this.setState(newContext)
+    })
   }
 }

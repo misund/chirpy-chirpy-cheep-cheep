@@ -14,7 +14,12 @@ export default function Home() {
           <a>Second: gRPC-web, single unary call</a>
         </Link>
       </li>
-      <Tweet screenName="misund" text="This is a tweet" />
+      <li>
+        <Link href="/grpc-web-streaming" as="/grpc-web-streaming">
+          <a>Second: gRPC-web, server streaming</a>
+        </Link>
+      </li>
+      <Tweet screenName="misund" text="I made this." />
     </ul>
   )
 }
