@@ -11,7 +11,7 @@
     "build:proto": "./compile-proto.sh",
     "build:next": "next build",
     "build:ts": "tsc --project tsconfig.server.json",
-    "start": "yarn start next",
+    "start": "yarn dev",
     "start:next": "cross-env NODE_ENV=production node dist/next.js",
     "start:grpc": "node dist/grpc",
     "start:envoy": "docker run --name grpc-envoy -d -p 8080:8080 -v \"$(pwd)\"/envoy.yaml:/etc/envoy/envoy.yaml:ro envoyproxy/envoy-dev:latest",

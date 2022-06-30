@@ -59,16 +59,18 @@ That should do it. It spins up a grpc server, an envoy proxy and a nextjs server
 ```
 yarn build
 
-yarn start:next # localhost:3000
-yarn start:envoy # localhost:8080
-yarn start:grpc # localhost:9090
+yarn start
+
+# yarn start:next # localhost:3000
+# yarn start:envoy # localhost:8080
+# yarn start:grpc # localhost:9090
 ```
 
-This bit could be improved. Envoy is dockerized, I want to dockerize the two others as well and maybe run them through docker-compose.
+This bit could be improved. Envoy is dockerized from elsewhere. I would like to dockerize the two others as well and maybe run them through docker-compose.
 
 ## What' Missing
 
 - tests
 - ci/cd flows
-- kubernetes configuration
+- kubernetes
 - cleaning up disused streams doesn't work the way I thought
