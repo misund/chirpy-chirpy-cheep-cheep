@@ -2,25 +2,14 @@ import React from 'react'
 import { debounce } from 'debounce'
 import TweetsContext, { ITweetsContext } from '../components/TweetsContext'
 import Tweets from '../components/Tweets'
+import twitter, { ITwitterApiSearchResult } from '../services/twitter'
+import {
+  apiToContextMeta,
+  apiToContextTweets,
+  apiToContextUsers,
+} from '../utils/type-conversion'
 
-const API_URL = '/api/twitter/2/'
-const UPDATE_FREQUENCY = 30000
-
-function fetchData(query: string, since_id?: string) {
-  const url =
-    `${API_URL}tweets/search/recent` +
-    '?tweet.fields=created_at' +
-    '&user.fields=profile_image_url' +
-    '&expansions=author_id' +
-    `&query=${query}` +
-    `${(since_id && `&since_id=${since_id}`) || ''}`
-
-  // console.log('outgoing request', url)
-
-  return fetch(url)
-    .then(res => res.json())
-    .catch(err => console.error(err))
-}
+const UPDATE_FREQUENCY = 10000
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {}
@@ -44,7 +33,13 @@ export default class LongPolling extends React.Component<
     super(props)
     this.state = {
       tweets: [],
-      meta: { query: '' },
+      meta: {
+        query: '',
+        newestId: '',
+        nextToken: '',
+        oldestId: '',
+        resultCount: 0,
+      },
       users: [],
     }
   }
@@ -85,37 +80,38 @@ export default class LongPolling extends React.Component<
       return
     }
 
-    fetchData(query)
+    twitter
+      .search(query)
       .then(this.updateContext.bind(null, query))
       .catch(err => console.error(err))
   }
 
   updateTweets() {
-    const { query, newest_id } = this.state.meta
+    const { query, newestId } = this.state.meta
 
-    if (!query || !newest_id) {
+    if (!query || !newestId) {
       console.warn("No query or newest id, can't update tweets")
       return
     }
 
-    fetchData(query, newest_id)
+    twitter
+      .search(query, newestId)
       .then(this.updateContext.bind(null, query))
       .catch(err => console.error(err))
   }
 
-  updateContext = (query: string, json: any) => {
-    if (json.meta.result_count > 0) {
+  updateContext = (query: string, json: ITwitterApiSearchResult) => {
+    if (json.meta.result_count) {
       this.setState(({ tweets, users, meta }) => {
         // clear tweets if the query is different
         const ts = meta.query === query ? tweets : []
 
         const newContext = {
-          tweets: (json.data || []).concat(ts),
-          users: users.concat(json.includes?.users || []),
+          tweets: apiToContextTweets(json.data || []).concat(ts),
+          users: users.concat(apiToContextUsers(json.includes?.users)),
           meta: {
             ...meta,
-            query: query,
-            ...json.meta,
+            ...apiToContextMeta(json.meta, query),
           },
         }
 
