@@ -1,15 +1,15 @@
 import * as grpc from '@grpc/grpc-js'
+import { apiResponseToGrpcSearchReply } from '../../type-conversions/twitter-api-and-tweets-context'
 import {
   ITweetsServer,
   TweetsService,
 } from '../../generated/proto/twitter_grpc_pb'
 import {
-  Tweet,
-  User,
   Meta,
   SearchReply,
   SearchRequest,
 } from '../../generated/proto/twitter_pb'
+import twitter from '../../services/twitter'
 
 const tweetsHandler: ITweetsServer = {
   unarySearch(
@@ -17,34 +17,13 @@ const tweetsHandler: ITweetsServer = {
     callback: grpc.sendUnaryData<SearchReply>,
   ): void {
     if (call.request) {
-      console.log('this is tweetsServer.unarySearch()')
+      const query = call.request.getQuery()
+      const sinceID = call.request.getSinceId()
 
-      const tweet = new Tweet()
-      tweet.setId('123')
-      tweet.setAuthorId('123')
-      tweet.setCreatedAt(Date.now().toString())
-      tweet.setText('This is a test tweet from my grpc server')
-      const tweets = [tweet, tweet]
-
-      const user = new User()
-      user.setId('123')
-      user.setName('A Very Real Name')
-      user.setUsername('tester')
-      user.setProfileImageUrl('https://ui-avatars.com/api/?size=32&name=tester')
-      const users = [user]
-
-      const meta = new Meta()
-      meta.setQuery(call.request.getQuery())
-      meta.setResultCount(1)
-
-      const searchReply = new SearchReply()
-      searchReply.setMeta(meta)
-      searchReply.setTweetsList(tweets)
-      searchReply.setUsersList(users)
-
-      // console.log('search reply: ', searchReply.toObject())
-
-      callback(null, searchReply)
+      twitter
+        .search(query, sinceID)
+        .then(apiResponseToGrpcSearchReply)
+        .then(reply => callback(null, reply))
     }
   },
   search(call: grpc.ServerWritableStream<SearchRequest, SearchReply>): void {
@@ -60,5 +39,4 @@ const tweetsHandler: ITweetsServer = {
 export default {
   service: TweetsService,
   handler: tweetsHandler,
-  client: undefined,
 }

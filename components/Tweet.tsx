@@ -6,6 +6,7 @@ const TweetBox = styled.div`
 `
 
 interface TweetProps {
+  name?: string
   screenName: string
   avatarImg?: string
   text: string
@@ -28,7 +29,7 @@ const Text = styled.div`
   color: #333;
 `
 
-const Tweet = ({ screenName, avatarImg = '', text }: TweetProps) => {
+const Tweet = ({ screenName, avatarImg = '', text, name = '' }: TweetProps) => {
   const avatarSrc = avatarImg
     ? avatarImg
     : `https://ui-avatars.com/api/?size=32&name=${screenName}`
@@ -37,7 +38,9 @@ const Tweet = ({ screenName, avatarImg = '', text }: TweetProps) => {
     <TweetBox>
       <Img src={avatarSrc} alt={screenName} />
       <TextBlock>
-        <ScreenName>{screenName}</ScreenName>
+        <ScreenName>
+          {name} (@{screenName})
+        </ScreenName>
         <Text>{text}</Text>
       </TextBlock>
     </TweetBox>

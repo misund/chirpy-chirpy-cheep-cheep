@@ -2,7 +2,6 @@ import grpc from '@grpc/grpc-js'
 import {
   IPingPongServiceServer,
   PingPongServiceService,
-  // PingPongServiceClient,
 } from '../../generated/proto/ping_grpc_pb'
 import { PlainMessage } from '../../generated/proto/ping_pb'
 
@@ -24,5 +23,4 @@ const pingPongHandler: IPingPongServiceServer = {
 export default {
   service: PingPongServiceService,
   handler: pingPongHandler,
-  // client: new PingPongServiceClient('', grpc.credentials.createInsecure()),
 }

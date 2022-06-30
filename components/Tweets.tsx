@@ -4,17 +4,18 @@ import Tweet from './Tweet'
 const Tweets = () => (
   <TweetsContext.Consumer>
     {({ tweets, users }) => {
-      return tweets.map(({ author_id, text, id }) => {
-        const { username, profile_image_url, profileImageUrl } = users.find(
-          user => user.id == author_id,
+      return tweets.map(({ authorId, id, ...rest }) => {
+        const { username, name, profileImageUrl } = users.find(
+          user => user.id == authorId,
         ) || { username: 'unknown user' }
 
         return (
           <Tweet
             key={id}
             screenName={username}
-            text={text}
-            avatarImg={profile_image_url || profileImageUrl}
+            avatarImg={profileImageUrl}
+            name={name}
+            {...rest}
           />
         )
       })

@@ -2,10 +2,14 @@ import React from 'react'
 import { debounce } from 'debounce'
 import TweetsContext, { ITweetsContext } from '../components/TweetsContext'
 import Tweets from '../components/Tweets'
-import twitter from '../services/twitter'
+import twitter, { ITwitterApiSearchResult } from '../services/twitter'
+import {
+  apiToContextMeta,
+  apiToContextTweets,
+  apiToContextUsers,
+} from '../type-conversions/twitter-api-and-tweets-context'
 
-const API_URL = '/api/twitter/2/'
-const UPDATE_FREQUENCY = 30000
+const UPDATE_FREQUENCY = 10000
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {}
@@ -29,7 +33,13 @@ export default class LongPolling extends React.Component<
     super(props)
     this.state = {
       tweets: [],
-      meta: { query: '' },
+      meta: {
+        query: '',
+        newestId: '',
+        nextToken: '',
+        oldestId: '',
+        resultCount: 0,
+      },
       users: [],
     }
   }
@@ -77,32 +87,34 @@ export default class LongPolling extends React.Component<
   }
 
   updateTweets() {
-    const { query, newest_id } = this.state.meta
+    const { query, newestId } = this.state.meta
 
-    if (!query || !newest_id) {
+    if (!query || !newestId) {
       console.warn("No query or newest id, can't update tweets")
       return
     }
 
     twitter
-      .search(query, newest_id)
+      .search(query, newestId)
       .then(this.updateContext.bind(null, query))
       .catch(err => console.error(err))
   }
 
-  updateContext = (query: string, json: any) => {
-    if (json.meta.result_count > 0) {
+  updateContext = (query: string, json: ITwitterApiSearchResult) => {
+    if (json.meta.result_count) {
       this.setState(({ tweets, users, meta }) => {
         // clear tweets if the query is different
         const ts = meta.query === query ? tweets : []
 
+        console.log('before conversion', json.includes?.users)
+        console.log('after conversion', apiToContextUsers(json.includes?.users))
+
         const newContext = {
-          tweets: (json.data || []).concat(ts),
-          users: users.concat(json.includes?.users || []),
+          tweets: apiToContextTweets(json.data || []).concat(ts),
+          users: users.concat(apiToContextUsers(json.includes?.users)),
           meta: {
             ...meta,
-            query: query,
-            ...json.meta,
+            ...apiToContextMeta(json.meta, query),
           },
         }
 

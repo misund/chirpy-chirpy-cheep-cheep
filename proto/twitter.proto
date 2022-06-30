@@ -21,7 +21,7 @@ message User {
 
 message Meta {
     string query = 1;
-    string newest_id = 2;
+    optional string newest_id = 2;
     string next_token = 3;
     string oldest_id = 4;
     int32 result_count = 5;
