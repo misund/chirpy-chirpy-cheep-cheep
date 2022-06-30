@@ -3,11 +3,11 @@
 1. [x] Create a simple front with a client-side direct API call
 1. [x] Get Twitter dev account
 1. [x] (Implement long polling? Not sure if I need it after gPRC implementation is done)
-1. [ ] Move the API call to a custom server
+1. [x] Move the API call to a custom server
 1. [x] (Proxy the Twitter API calls for simpler caching?)
-1. [ ] Create a protobuf definition of the service and messages
-1. [ ] Implement the gRPC server
-1. [ ] Implement the gRPC client
+1. [x] Create a protobuf definition of the service and messages
+1. [x] Implement the gRPC server
+1. [x] Implement the gRPC client
 1. [ ] (Cache the tweets in a local redis? If I don't cache the external API calls. Figure out how/whether to leverage protobuf for this?)
 1. [ ] Dockerize
 1. [ ] Deploy somewhere
