@@ -9,7 +9,7 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-const logError = (err: any) => console.error(err)
+const logError = (err: Error) => console.error(err)
 
 /**
  * Proxy the Twitter API
