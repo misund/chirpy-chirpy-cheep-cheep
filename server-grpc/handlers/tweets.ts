@@ -54,6 +54,7 @@ const tweetsHandler: ITweetsServer = {
     }
   },
   search(call: grpc.ServerWritableStream<SearchRequest, SearchReply>): void {
+    updateStream(call)
     const id = setInterval(() => updateStream(call), UPDATE_INTERVAL)
 
     call.on('close', () => {

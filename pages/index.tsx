@@ -16,7 +16,7 @@ export default function Home() {
       </li>
       <li>
         <Link href="/grpc-web-streaming" as="/grpc-web-streaming">
-          <a>Second: gRPC-web, server streaming</a>
+          <a>Third: gRPC-web, server streaming</a>
         </Link>
       </li>
       <Tweet screenName="misund" text="I made this." />

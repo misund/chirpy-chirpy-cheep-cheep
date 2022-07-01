@@ -1,5 +1,5 @@
 {
-  "watch": ["server-next"],
+  "watch": ["server-next", "generated", "utils"],
   "exec": "ts-node --project tsconfig.server.json server-grpc/index.ts",
   "ext": "js ts"
 }
